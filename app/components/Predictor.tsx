@@ -260,15 +260,16 @@ export default function Predictor() {
         body: JSON.stringify(formData),
       });
       
-      const data = await response.json();
+     const data = await response.json();
 
-      if (response.ok) {
-        setResult(data);
-      } else {
-        // FIX: Extract the actual error message string
-        const errorMsg = typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail);
-        alert("Server Error: " + errorMsg);
-      }
+if (response.ok) {
+    setResult(data);
+} else {
+    // This change converts the object into a readable string
+    const errorMessage = data.detail ? JSON.stringify(data.detail) : "Unknown Server Error";
+    alert("Real Error: " + errorMessage);
+    console.error("Full Error Object:", data);
+}
     } catch (err) {
       alert("Failed to connect to backend. Make sure the API is running.");
     } finally {
