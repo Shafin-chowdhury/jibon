@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ThalCheckAI",
+  title: "JIBON",
   description: "Advanced Machine Learning Project",
 };
 

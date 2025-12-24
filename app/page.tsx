@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { useState } from "react";
 import Navbar from "./components/Navbar";
@@ -5,7 +7,7 @@ import Hero from "./components/Hero";
 import About from "./components/About";
 import Predictor from "./components/Predictor";
 import Stats from "./components/Stats";
-import Summary from "./components/Summery";
+
 
 export default function Home() {
   const [view, setView] = useState("home");
@@ -39,16 +41,6 @@ export default function Home() {
           </section>
         )}
 
-        {view === "summary" && predictionData && (
-          <section className="pt-24 min-h-screen bg-slate-50">
-            {/* Pass the prediction data and a back button handler to Summary */}
-            <Summary result={predictionData} onBack={handleBackToPredictor} />
-          </section>
-        )}
-
-        {view === "summary" && !predictionData && (
-            <div className="pt-24 text-center py-20 text-slate-500">Loading summary...</div>
-        )}
       </main>
 
       <footer className="py-12 border-t border-slate-100 text-center text-slate-500 text-sm bg-white font-medium">
