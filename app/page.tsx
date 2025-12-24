@@ -132,22 +132,15 @@
 
 
 
-
-
 "use client";
 import { useState } from "react";
-import Navbar from "./components/Navbar";
+// 2. Import both the Component AND the Type from the Navbar file
+import Navbar, { ViewState } from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
 import Predictor from "./components/Predictor";
 import Stats from "./components/Stats";
 
-/** * 1. DEFINE TYPE: This must be defined before the component 
- * to ensure TypeScript knows what "ViewState" is.
- */
-export type ViewState = "home" | "predictor" | "summary";
-
-// Define type for prediction result
 interface PredictionResult {
   thalassemia_result: string;
   probability: number;
@@ -158,21 +151,18 @@ interface PredictionResult {
 }
 
 export default function Home() {
+  // Use the imported ViewState here
   const [view, setView] = useState<ViewState>("home");
   const [predictionData, setPredictionData] = useState<PredictionResult | null>(null);
 
   const handlePredictionSuccess = (data: PredictionResult) => {
     setPredictionData(data);
     setView("summary");
-    // Scroll smoothly to top
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 50);
   };
 
-  /**
-   * 2. NAVIGATION LOGIC: Handles smooth scrolling and view state.
-   */
   const handleNavigation = (target: ViewState) => {
     setView(target);
     if (target === "home") {
@@ -182,7 +172,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      {/* 3. TYPE SAFE NAVBAR: Pass handleNavigation to avoid 'any' casting */}
+      {/* 3. Now this is perfectly type-safe */}
       <Navbar onNav={handleNavigation} />
 
       <main className="flex-grow">
@@ -212,7 +202,6 @@ export default function Home() {
                 </div>
                 
                 <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Result Card */}
                   <div className={`flex items-center gap-4 p-5 rounded-2xl border shadow-sm ${
                     predictionData.thalassemia_result.toLowerCase().includes("normal") 
                     ? "bg-emerald-50 border-emerald-100" 
@@ -229,7 +218,6 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Confidence Card */}
                   <div className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm">
                     <div className="text-4xl">📊</div>
                     <div>
