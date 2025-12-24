@@ -134,7 +134,6 @@
 
 
 
-
 "use client";
 import { useState } from "react";
 import Navbar from "./components/Navbar";
@@ -142,6 +141,11 @@ import Hero from "./components/Hero";
 import About from "./components/About";
 import Predictor from "./components/Predictor";
 import Stats from "./components/Stats";
+
+/** * 1. DEFINE TYPE: This must be defined before the component 
+ * to ensure TypeScript knows what "ViewState" is.
+ */
+export type ViewState = "home" | "predictor" | "summary";
 
 // Define type for prediction result
 interface PredictionResult {
@@ -152,8 +156,6 @@ interface PredictionResult {
   mentzer_index: number;
   green_king_index: number;
 }
-
-
 
 export default function Home() {
   const [view, setView] = useState<ViewState>("home");
@@ -168,7 +170,9 @@ export default function Home() {
     }, 50);
   };
 
-  // Fixed Navigation Handler
+  /**
+   * 2. NAVIGATION LOGIC: Handles smooth scrolling and view state.
+   */
   const handleNavigation = (target: ViewState) => {
     setView(target);
     if (target === "home") {
@@ -178,10 +182,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      {/* USE handleNavigation HERE to ensure types and logic match */}
+      {/* 3. TYPE SAFE NAVBAR: Pass handleNavigation to avoid 'any' casting */}
       <Navbar onNav={handleNavigation} />
-
-
 
       <main className="flex-grow">
         {view === "home" && (
@@ -290,4 +292,3 @@ export default function Home() {
     </div>
   );
 }
-
