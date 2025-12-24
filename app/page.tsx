@@ -135,8 +135,6 @@
 
 
 
-
-
 "use client";
 import { useState } from "react";
 import Navbar from "./components/Navbar";
@@ -155,7 +153,7 @@ interface PredictionResult {
   green_king_index: number;
 }
 
-// 1. Define the allowed view types as a reusable type
+// Allowed view types
 type ViewState = "home" | "predictor" | "summary";
 
 export default function Home() {
@@ -165,24 +163,23 @@ export default function Home() {
   const handlePredictionSuccess = (data: PredictionResult) => {
     setPredictionData(data);
     setView("summary");
+    // Scroll smoothly to top
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 50);
   };
 
-  // 2. Fixed Navigation Handler: handles both view changes and scrolling
+  // Fixed Navigation Handler
   const handleNavigation = (target: ViewState) => {
+    setView(target);
     if (target === "home") {
-      setView("home");
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      setView(target);
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      {/* 3. Pass the fixed handler to Navbar */}
+      {/* USE handleNavigation HERE to ensure types and logic match */}
       <Navbar onNav={handleNavigation} />
 
       <main className="flex-grow">
@@ -212,7 +209,7 @@ export default function Home() {
                 </div>
                 
                 <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Thalassemia Result */}
+                  {/* Result Card */}
                   <div className={`flex items-center gap-4 p-5 rounded-2xl border shadow-sm ${
                     predictionData.thalassemia_result.toLowerCase().includes("normal") 
                     ? "bg-emerald-50 border-emerald-100" 
@@ -229,7 +226,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Probability */}
+                  {/* Confidence Card */}
                   <div className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm">
                     <div className="text-4xl">📊</div>
                     <div>
@@ -238,7 +235,6 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Iron Metabolism */}
                   <div className="flex items-center gap-4 p-5 bg-amber-50 rounded-2xl border border-amber-100 shadow-sm">
                     <div className="text-4xl">🧪</div>
                     <div>
@@ -247,7 +243,6 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Mentzer Index */}
                   <div className="flex items-center gap-4 p-5 bg-cyan-50 rounded-2xl border border-cyan-100 shadow-sm">
                     <div className="text-4xl">📏</div>
                     <div>
@@ -256,7 +251,6 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Green-King Index */}
                   <div className="flex items-center gap-4 p-5 bg-purple-50 rounded-2xl border border-purple-100 shadow-sm md:col-span-2">
                     <div className="text-4xl">🧮</div>
                     <div>
@@ -281,8 +275,8 @@ export default function Home() {
                   </button>
                 </div>
               </div>
-              <p className="mt-6 text-center text-xs text-slate-400 italic">
-                The Mentzer Index and Green-King Index are discriminative tools used to differentiate between Iron Deficiency Anemia and Thalassemia Trait.
+              <p className="mt-6 text-center text-xs text-slate-400 italic px-4">
+                The Mentzer Index and Green-King Index are tools to differentiate between Iron Deficiency Anemia and Thalassemia Trait.
               </p>
             </div>
           </section>
@@ -293,5 +287,41 @@ export default function Home() {
         <p>© 2025 ThalCheck AI Research Lab. For screening purposes only. Consult a doctor for medical advice.</p>
       </footer>
     </div>
+  );
+}
+
+// Separated Navbar Component for clarity and type safety
+function InternalNavbar({ 
+  onNav 
+}: { 
+  onNav: (page: ViewState) => void 
+}) {
+  const scrollToAbout = () => {
+    onNav('home');
+    setTimeout(() => {
+      const element = document.getElementById('about-section');
+      if (element) element.scrollIntoView({ behavior: 'smooth' });
+    }, 150);
+  };
+
+  return (
+    <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-slate-100">
+      <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => onNav('home')}>
+          <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">T</div>
+          <span className="text-xl font-bold text-slate-800 tracking-tight">JIBO<span className="text-red-600">N</span></span>
+        </div>
+        <div className="hidden md:flex items-center gap-8 font-medium text-slate-600">
+          <button onClick={() => onNav('home')} className="hover:text-red-600 transition-colors">Home</button>
+          <button onClick={scrollToAbout} className="hover:text-red-600 transition-colors">How it Works</button>
+          <button 
+            onClick={() => onNav('predictor')} 
+            className="bg-slate-900 text-white px-6 py-2.5 rounded-full hover:bg-red-600 transition-all shadow-md"
+          >
+            Get Started
+          </button>
+        </div>
+      </div>
+    </nav>
   );
 }

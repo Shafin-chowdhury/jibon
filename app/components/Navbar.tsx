@@ -44,11 +44,13 @@
 
 
 
-export default function Navbar({ 
+
+ export default function Navbar({ 
   onNav 
 }: { 
   onNav: (page: "home" | "predictor" | "summary") => void 
-}) {
+}) 
+ {
   const scrollToAbout = () => {
     onNav('home'); // Ensure we are on home view
     setTimeout(() => {
