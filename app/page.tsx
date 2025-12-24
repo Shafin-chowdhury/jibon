@@ -153,8 +153,7 @@ interface PredictionResult {
   green_king_index: number;
 }
 
-// Allowed view types
-type ViewState = "home" | "predictor" | "summary";
+
 
 export default function Home() {
   const [view, setView] = useState<ViewState>("home");
@@ -181,6 +180,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col bg-white">
       {/* USE handleNavigation HERE to ensure types and logic match */}
       <Navbar onNav={handleNavigation} />
+
 
 
       <main className="flex-grow">
